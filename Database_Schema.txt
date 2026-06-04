@@ -1,0 +1,29 @@
+
+## Schema
+
+# users
+    CREATE TABLE users(
+        id NUMBER PRIMARY KEY,
+        username VARCHAR2(50),
+        email VARCHAR2(100),
+        password VARCHAR2(100),
+        telegram_chat_id VARCHAR2(100)
+    );
+
+# reminders
+    CREATE TABLE reminders(
+        id NUMBER PRIMARY KEY,
+        user_id NUMBER,
+        interval_minutes NUMBER,
+        active NUMBER(1),
+        FOREIGN KEY(user_id)
+        REFERENCES users(id)
+    );
+
+# water_logs
+    CREATE TABLE water_logs(
+        id NUMBER PRIMARY KEY,
+        user_id NUMBER,
+        amount_ml NUMBER,
+        log_time TIMESTAMP
+    );
