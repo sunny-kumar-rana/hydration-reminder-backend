@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HydrationReminderBackendApplication {
+public class HydrationReminderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HydrationReminderBackendApplication.class, args);
+        SpringApplication.run(HydrationReminderApplication.class, args);
     }
 
 }
