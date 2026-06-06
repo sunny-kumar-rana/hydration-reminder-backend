@@ -4,7 +4,6 @@ import com.hydration.dto.RegisterRequest;
 import com.hydration.dto.RegisterResponse;
 import com.hydration.entity.User;
 import com.hydration.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,7 +28,7 @@ public class UserService {
 
         RegisterResponse response = new RegisterResponse();
         response.setUsername(user.getUsername());
-        response.setMessage("User Registered Successfully");
+        response.setMessage("user "+user.getUsername()+" Registered Successfully");
 
         return response;
     }
