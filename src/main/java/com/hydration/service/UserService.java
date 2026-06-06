@@ -3,6 +3,8 @@ package com.hydration.service;
 import com.hydration.dto.RegisterRequest;
 import com.hydration.dto.RegisterResponse;
 import com.hydration.entity.User;
+import com.hydration.exception.EmailAlreadyExistsException;
+import com.hydration.exception.UsernameAlreadyExistsException;
 import com.hydration.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,10 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest request){
         if(userRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("username already exists");
-        }if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("e-mail already exists");
+            throw new UsernameAlreadyExistsException();
+        }
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new EmailAlreadyExistsException();
         }
         User user = new User();
         user.setUsername(request.getUsername());
