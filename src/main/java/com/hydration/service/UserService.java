@@ -6,14 +6,17 @@ import com.hydration.entity.User;
 import com.hydration.exception.EmailAlreadyExistsException;
 import com.hydration.exception.UsernameAlreadyExistsException;
 import com.hydration.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public RegisterResponse register(RegisterRequest request){
@@ -26,12 +29,12 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        User savedUser = userRepository.save(user);
 
         RegisterResponse response = new RegisterResponse();
-        response.setUsername(user.getUsername());
-        response.setMessage("user "+user.getUsername()+" Registered Successfully");
+        response.setUsername(savedUser.getUsername());
+        response.setMessage("user "+savedUser.getUsername()+" Registered Successfully");
 
         return response;
     }
