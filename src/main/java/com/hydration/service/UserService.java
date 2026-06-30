@@ -1,9 +1,12 @@
 package com.hydration.service;
 
+import com.hydration.dto.LoginRequest;
+import com.hydration.dto.LoginResponse;
 import com.hydration.dto.RegisterRequest;
 import com.hydration.dto.RegisterResponse;
 import com.hydration.entity.User;
 import com.hydration.exception.EmailAlreadyExistsException;
+import com.hydration.exception.InvalidCredentialsException;
 import com.hydration.exception.UsernameAlreadyExistsException;
 import com.hydration.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,5 +40,13 @@ public class UserService {
         response.setMessage("user "+savedUser.getUsername()+" Registered Successfully");
 
         return response;
+    }
+
+    public LoginResponse login(LoginRequest request){
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(InvalidCredentialsException::new);
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new InvalidCredentialsException();
+        }
+        return new LoginResponse(user.getUsername(), "Login successful");
     }
 }
