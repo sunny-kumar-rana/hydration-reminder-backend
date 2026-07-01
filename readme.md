@@ -1,50 +1,50 @@
-# Hydration Reminder System
+# 💧 Hydration Reminder
 
-A Spring Boot application that helps users stay hydrated by sending periodic reminders. Users can register with a username and email address, and future versions will support Telegram notifications, scheduled reminders, water intake tracking, and a React frontend.
+A full-stack hydration reminder application built with **Spring Boot** and **React.js**. The goal of this project is to help users build healthy hydration habits by sending scheduled reminders through multiple notification channels such as Email and Telegram.
 
-## Current Status
-
-### Completed Features
-
-* User Registration API
-* Request Validation
-* Custom Exception Handling
-* Global Exception Handling
-* Oracle Database Integration
-* JPA/Hibernate Persistence
-* Automatic Entity Timestamping
+This project is being developed incrementally while following industry-standard Spring Boot architecture and best practices.
 
 ---
 
-## Tech Stack
+## 🚀 Tech Stack
 
 ### Backend
 
-* Java
+* Java 21
 * Spring Boot
 * Spring Data JPA
+* Spring Security
 * Hibernate
 * Oracle Database
+* Jakarta Bean Validation
 * Lombok
-* Jakarta Validation
+* Maven
 
-### Planned Frontend
+### Frontend (Planned)
 
 * React.js
+* React Router
+* Axios
+* Tailwind CSS / Ant Design (TBD)
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
 src/main/java/com/hydration
 
+├── config
+│   └── SecurityConfig
+│
 ├── controller
 │   └── UserController
 │
 ├── dto
 │   ├── RegisterRequest
 │   ├── RegisterResponse
+│   ├── LoginRequest
+│   ├── LoginResponse
 │   └── ErrorResponse
 │
 ├── entity
@@ -53,41 +53,58 @@ src/main/java/com/hydration
 ├── exception
 │   ├── UsernameAlreadyExistsException
 │   ├── EmailAlreadyExistsException
+│   ├── InvalidCredentialsException
 │   └── GlobalExceptionHandler
 │
 ├── repository
 │   └── UserRepository
 │
-└── service
-    └── UserService
+├── service
+│   └── UserService
+│
+└── HydrationReminderApplication
 ```
 
 ---
 
-## Database Design
+## ✅ Features Implemented
 
-### Users Table
+### User Registration
 
-| Column           | Description                 |
-| ---------------- | --------------------------- |
-| id               | Primary Key                 |
-| username         | Unique Username             |
-| email            | Unique Email                |
-| password         | User Password               |
-| telegram_chat_id | Telegram Chat ID (nullable) |
-| created_at       | Account Creation Timestamp  |
+* User registration API
+* Username uniqueness validation
+* Email uniqueness validation
+* Request validation using Jakarta Validation
+* Global exception handling
+* Structured API responses
+* Oracle database integration
+
+### Authentication
+
+* Login using username
+* Password hashing using BCrypt
+* Password verification using `PasswordEncoder.matches()`
+* Secure authentication flow
+* Generic authentication failure responses to prevent username enumeration
+
+### Error Handling
+
+* Global exception handling using `@RestControllerAdvice`
+* Custom exceptions
+* Validation error handling
+* Proper HTTP status codes
 
 ---
 
-## API Endpoints
+## 📌 API Endpoints
 
-### Register User
+### Register
 
 ```http
 POST /api/auth/register
 ```
 
-Request:
+Example Request
 
 ```json
 {
@@ -97,128 +114,149 @@ Request:
 }
 ```
 
-Success Response:
+---
+
+### Login
+
+```http
+POST /api/auth/login
+```
+
+Example Request
 
 ```json
 {
   "username": "shubh123",
-  "message": "User shubh123 Registered Successfully"
+  "password": "secret123"
 }
 ```
 
 ---
 
-## Validation Rules
+## 🗄 Database
 
-### Username
+Current User table fields:
 
-* Required
-* Minimum 5 characters
-* Maximum 20 characters
-
-### Email
-
-* Required
-* Must be a valid email format
-
-### Password
-
-* Required
-* Minimum 6 characters
-* Maximum 16 characters
+| Column           | Description                |
+| ---------------- | -------------------------- |
+| id               | Primary Key                |
+| username         | Unique Username            |
+| email            | Unique Email               |
+| password         | BCrypt Hashed Password     |
+| telegram_chat_id | Nullable                   |
+| created_at       | Account Creation Timestamp |
 
 ---
 
-## Error Handling
+## 🔒 Security
 
-### Duplicate Username
-
-```json
-{
-  "message": "Username already exists",
-  "status": 409
-}
-```
-
-### Duplicate Email
-
-```json
-{
-  "message": "Email already exists",
-  "status": 409
-}
-```
-
-### Validation Failure
-
-```json
-{
-  "username": "Username must be between 5 and 20 characters",
-  "email": "Email must be valid"
-}
-```
+* BCrypt password hashing
+* Passwords are never stored in plain text
+* Username enumeration protection
+* Generic login failure responses
+* Constructor-based dependency injection
+* Spring Security `PasswordEncoder`
 
 ---
 
-## Learning Objectives
-
-This project is being built as a learning-focused full-stack application to understand:
+## 📚 Concepts Covered
 
 * Layered Architecture
-* REST API Development
+* REST APIs
+* Dependency Injection
+* IoC Container
 * DTO Pattern
-* Spring Data JPA
+* Repository Pattern
+* Constructor Injection
 * Bean Validation
 * Global Exception Handling
-* Dependency Injection
-* Oracle Database Integration
-* React and Spring Boot Integration
+* Spring Data JPA
+* Optional
+* ResponseEntity
+* BCrypt Password Hashing
+* Spring Configuration
+* Bean Creation
+* Custom Exceptions
 
 ---
 
-## Upcoming Features
+## 🛠 Planned Features
 
-### Phase 2
+### Authentication
 
-* Password Encryption (BCrypt)
-* User Login API
-* Authentication Flow
+* JWT Authentication
+* Refresh Tokens
+* Remember Me
 
-### Phase 3
+### Hydration
 
-* Water Intake Tracking
-* Daily Water Logs
-* Water Consumption Statistics
+* Daily Water Intake Logging
+* Custom Daily Water Goal
+* Water Consumption History
+* Daily Statistics
 
-### Phase 4
+### Reminder System
 
-* Reminder Scheduling
 * Spring Scheduler
-* Configurable Reminder Intervals
+* Custom Reminder Interval
+* Reminder History
 
-### Phase 5
+### Notifications
 
 * Telegram Bot Integration
-* Telegram Account Linking
-* Telegram Notifications
+* Email Notifications
+* Multiple Notification Channels
 
-### Phase 6
+### Frontend
 
-* React Frontend
-* Registration Page
-* Login Page
+* User Registration
+* Login
 * Dashboard
-* Water Tracking UI
+* Water Intake Tracking
+* Reminder Settings
+* User Profile
 
-### Phase 7
+### Deployment
 
-* Deployment
-* Backend Hosting
-* Frontend Hosting
-* Production Configuration
+* Docker
+* CI/CD
+* Cloud Deployment
+* Production Database
 
 ---
 
-## Author
+## 🎯 Learning Goals
 
-Built as a Spring Boot + React learning project with a focus on industry-standard architecture and best practices.
+This project focuses on building a production-style Spring Boot application while understanding every concept from first principles instead of simply copying code.
+
+Topics include:
+
+* Spring Boot Fundamentals
+* Spring Security
+* Authentication
+* REST API Design
+* Database Design
+* Backend Architecture
+* Full-Stack Development
+* Clean Code Practices
+
+---
+
+## 📈 Current Progress
+
+* ✅ Project Setup
+* ✅ User Registration
+* ✅ Login Authentication
+* ✅ Password Encryption
+* ⏳ JWT Authentication
+* ⏳ Water Tracking
+* ⏳ Reminder Scheduling
+* ⏳ Telegram Integration
+* ⏳ React Frontend
+* ⏳ Deployment
+
+---
+
+## 👨‍💻 Author
+
+Built as a learning-focused full-stack project to explore modern Java backend development using Spring Boot and React while following production-oriented architecture and best practices.
