@@ -9,18 +9,19 @@ import com.hydration.exception.EmailAlreadyExistsException;
 import com.hydration.exception.InvalidCredentialsException;
 import com.hydration.exception.UsernameAlreadyExistsException;
 import com.hydration.repository.UserRepository;
+import com.hydration.security.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
+    private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public RegisterResponse register(RegisterRequest request){
         if(userRepository.existsByUsername(request.getUsername())){
@@ -47,6 +48,11 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new InvalidCredentialsException();
         }
-        return new LoginResponse(user.getUsername(), "Login successful");
+        String token = jwtService.generateToken(user.getUsername());
+        return new LoginResponse(
+                user.getUsername(),
+                token,
+                "Login successful"
+        );
     }
 }
