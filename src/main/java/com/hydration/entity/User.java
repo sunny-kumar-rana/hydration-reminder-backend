@@ -42,4 +42,16 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column
+    private Integer dailyGoal;
+
+    @Column
+    private Boolean emailNotificationEnabled;
+
+    @Column
+    private Boolean telegramNotificationEnabled;
+
+    @Column(nullable = false)
+    private String timezone;
 }
