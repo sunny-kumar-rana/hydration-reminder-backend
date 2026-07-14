@@ -1,7 +1,7 @@
 package com.hydration.controller;
 
-import com.hydration.dto.LoginRequest;
-import com.hydration.dto.LoginResponse;
+import com.hydration.dto.request.LoginRequest;
+import com.hydration.dto.response.LoginResponse;
 import com.hydration.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

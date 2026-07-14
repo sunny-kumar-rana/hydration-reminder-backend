@@ -1,7 +1,7 @@
 package com.hydration.controller;
 
-import com.hydration.dto.RegisterRequest;
-import com.hydration.dto.RegisterResponse;
+import com.hydration.dto.request.RegisterRequest;
+import com.hydration.dto.response.RegisterResponse;
 import com.hydration.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
