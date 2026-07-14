@@ -1,9 +1,12 @@
 package com.hydration.service;
 
-import com.hydration.dto.LoginRequest;
-import com.hydration.dto.LoginResponse;
-import com.hydration.dto.RegisterRequest;
-import com.hydration.dto.RegisterResponse;
+import com.hydration.dto.request.ChangePasswordRequest;
+import com.hydration.dto.request.LoginRequest;
+import com.hydration.dto.request.UpdateProfileRequest;
+import com.hydration.dto.response.LoginResponse;
+import com.hydration.dto.request.RegisterRequest;
+import com.hydration.dto.response.ProfileResponse;
+import com.hydration.dto.response.RegisterResponse;
 import com.hydration.entity.User;
 import com.hydration.exception.EmailAlreadyExistsException;
 import com.hydration.exception.InvalidCredentialsException;
@@ -54,5 +57,16 @@ public class UserService {
                 token,
                 "Login successful"
         );
+    }
+
+    public ProfileResponse getProfile(){
+        return null;
+    }
+
+    ProfileResponse updateProfile(UpdateProfileRequest request){
+        return null;
+    }
+
+    void changePassword(ChangePasswordRequest request){
     }
 }
