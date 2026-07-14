@@ -1,6 +1,6 @@
 package com.hydration.exception;
 
-import com.hydration.dto.ErrorResponse;
+import com.hydration.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -38,5 +38,13 @@ public class GlobalExceptionHandler {
         exception.getBindingResult().getFieldErrors().forEach(error -> response.put(error.getField(), error.getDefaultMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleIncorrectPassword(IncorrectPasswordException exception){
+        ErrorResponse response = new ErrorResponse();
+        response.setMessage(exception.getMessage());
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
