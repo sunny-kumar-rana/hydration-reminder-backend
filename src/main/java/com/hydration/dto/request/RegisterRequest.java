@@ -1,8 +1,9 @@
-package com.hydration.dto;
+package com.hydration.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class RegisterRequest {
     @NotBlank(message = "username cannot be empty")
     @Size(min = 5, max = 20, message = "username must be between 5 to 20 characters")

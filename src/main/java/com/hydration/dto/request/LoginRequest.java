@@ -1,4 +1,4 @@
-package com.hydration.dto;
+package com.hydration.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

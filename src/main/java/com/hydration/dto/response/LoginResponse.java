@@ -1,13 +1,16 @@
-package com.hydration.dto;
+package com.hydration.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
-public class RegisterResponse {
+@AllArgsConstructor
+public class LoginResponse {
     private String username;
+    private String token;
     private String message;
 }

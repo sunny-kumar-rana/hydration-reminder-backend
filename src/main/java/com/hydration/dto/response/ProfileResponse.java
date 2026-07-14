@@ -1,4 +1,4 @@
-package com.hydration.dto;
+package com.hydration.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
