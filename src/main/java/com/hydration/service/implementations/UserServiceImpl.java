@@ -1,11 +1,8 @@
-package com.hydration.service;
+package com.hydration.service.implementations;
 
-import com.hydration.dto.request.ChangePasswordRequest;
 import com.hydration.dto.request.LoginRequest;
-import com.hydration.dto.request.UpdateProfileRequest;
 import com.hydration.dto.response.LoginResponse;
 import com.hydration.dto.request.RegisterRequest;
-import com.hydration.dto.response.ProfileResponse;
 import com.hydration.dto.response.RegisterResponse;
 import com.hydration.entity.User;
 import com.hydration.exception.EmailAlreadyExistsException;
@@ -13,13 +10,14 @@ import com.hydration.exception.InvalidCredentialsException;
 import com.hydration.exception.UsernameAlreadyExistsException;
 import com.hydration.repository.UserRepository;
 import com.hydration.security.JwtService;
+import com.hydration.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -59,14 +57,4 @@ public class UserService {
         );
     }
 
-    public ProfileResponse getProfile(){
-        return null;
-    }
-
-    ProfileResponse updateProfile(UpdateProfileRequest request){
-        return null;
-    }
-
-    void changePassword(ChangePasswordRequest request){
-    }
 }
