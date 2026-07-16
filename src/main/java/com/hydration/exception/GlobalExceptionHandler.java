@@ -41,10 +41,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IncorrectPasswordException.class)
-    public ResponseEntity<ErrorResponse> handleIncorrectPassword(IncorrectPasswordException exception){
-        ErrorResponse response = new ErrorResponse();
-        response.setMessage(exception.getMessage());
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleIncorrectPassword(
+            IncorrectPasswordException exception) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(
+                        exception.getMessage(),
+                        HttpStatus.UNAUTHORIZED.value()
+                ));
     }
 }
