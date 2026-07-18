@@ -119,7 +119,21 @@ public class WaterServiceImpl implements WaterService {
 
     @Override
     public List<WaterResponse> getHistory() {
-        return List.of();
+
+        String username = getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        return waterIntakeRepository
+                .findAllByUserOrderByConsumedAtDesc(user)
+                .stream()
+                .map(water -> new WaterResponse(
+                        water.getId(),
+                        water.getAmount(),
+                        water.getConsumedAt()
+                ))
+                .toList();
     }
 
     @Override
