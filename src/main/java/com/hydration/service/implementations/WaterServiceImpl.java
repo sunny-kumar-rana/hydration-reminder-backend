@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -94,7 +95,26 @@ public class WaterServiceImpl implements WaterService {
 
     @Override
     public List<WaterResponse> getTodayWater() {
-        return List.of();
+
+        String username = getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        return waterIntakeRepository
+                .findAllByUserAndConsumedAtBetween(user, start, end)
+                .stream()
+                .map(water -> new WaterResponse(
+                        water.getId(),
+                        water.getAmount(),
+                        water.getConsumedAt()
+                ))
+                .toList();
     }
 
     @Override
