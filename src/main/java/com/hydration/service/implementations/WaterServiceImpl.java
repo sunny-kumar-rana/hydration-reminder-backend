@@ -80,6 +80,16 @@ public class WaterServiceImpl implements WaterService {
     @Override
     public void deleteWater(Long id) {
 
+        String username = getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        WaterIntake intake = waterIntakeRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(WaterIntakeNotFoundException::new);
+
+        waterIntakeRepository.delete(intake);
     }
 
     @Override
