@@ -138,6 +138,45 @@ public class WaterServiceImpl implements WaterService {
 
     @Override
     public DailySummaryResponse getDailySummary() {
-        return null;
+
+        String username = getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        List<WaterIntake> waterList =
+                waterIntakeRepository.findAllByUserAndConsumedAtBetween(
+                        user,
+                        start,
+                        end
+                );
+
+        int consumed = waterList.stream()
+                .mapToInt(WaterIntake::getAmount)
+                .sum();
+
+        int goal = user.getDailyGoal() == null
+                ? 0
+                : user.getDailyGoal();
+
+        int remaining = Math.max(goal - consumed, 0);
+
+        double progress =
+                goal == 0
+                        ? 0
+                        : (consumed * 100.0) / goal;
+
+        return new DailySummaryResponse(
+                today,
+                goal,
+                consumed,
+                remaining,
+                progress
+        );
     }
 }
