@@ -7,6 +7,7 @@ import com.hydration.dto.response.WaterResponse;
 import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
 import com.hydration.exception.InvalidCredentialsException;
+import com.hydration.exception.WaterIntakeNotFoundException;
 import com.hydration.repository.UserRepository;
 import com.hydration.repository.WaterIntakeRepository;
 import com.hydration.service.interfaces.WaterService;
@@ -55,7 +56,25 @@ public class WaterServiceImpl implements WaterService {
 
     @Override
     public WaterResponse updateWater(Long id, UpdateWaterRequest request) {
-        return null;
+
+        String username = getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        WaterIntake intake = waterIntakeRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(WaterIntakeNotFoundException::new);
+
+        intake.setAmount(request.getAmount());
+
+        WaterIntake updated = waterIntakeRepository.save(intake);
+
+        return new WaterResponse(
+                updated.getId(),
+                updated.getAmount(),
+                updated.getConsumedAt()
+        );
     }
 
     @Override
