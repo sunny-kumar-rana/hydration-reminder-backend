@@ -17,4 +17,12 @@ public interface WaterIntakeRepository extends JpaRepository<WaterIntake, Long> 
     Optional<WaterIntake> findByIdAndUser(Long id, User user);
 
     void deleteByIdAndUser(Long id, User user);
+
+    List<WaterIntake> findAllByUserAndConsumedAtBetweenOrderByConsumedAtAsc(
+            User user,
+            LocalDateTime start,
+            LocalDateTime end
+    );
+
+    List<WaterIntake> findAllByUserOrderByConsumedAtAsc(User user);
 }
