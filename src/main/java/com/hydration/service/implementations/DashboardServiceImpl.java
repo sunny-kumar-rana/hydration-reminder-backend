@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,7 +81,43 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public List<WeeklyProgressResponse> getWeeklyProgress() {
-        return null;
+
+        User user = getCurrentUser();
+
+        int goal = user.getDailyGoal() == null
+                ? 0
+                : user.getDailyGoal();
+
+        List<WeeklyProgressResponse> response = new ArrayList<>();
+
+        for (int i = 6; i >= 0; i--) {
+
+            LocalDate date = LocalDate.now().minusDays(i);
+
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+            int consumed = waterIntakeRepository
+                    .findAllByUserAndConsumedAtBetween(user, start, end)
+                    .stream()
+                    .mapToInt(WaterIntake::getAmount)
+                    .sum();
+
+            double progress = goal == 0
+                    ? 0
+                    : consumed * 100.0 / goal;
+
+            response.add(
+                    new WeeklyProgressResponse(
+                            date,
+                            consumed,
+                            goal,
+                            progress
+                    )
+            );
+        }
+
+        return response;
     }
 
     @Override
