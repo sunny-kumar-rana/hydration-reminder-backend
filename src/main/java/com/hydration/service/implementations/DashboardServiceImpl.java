@@ -122,7 +122,46 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public List<MonthlyProgressResponse> getMonthlyProgress() {
-        return null;
+
+        User user = getCurrentUser();
+
+        int goal = user.getDailyGoal() == null
+                ? 0
+                : user.getDailyGoal();
+
+        List<MonthlyProgressResponse> response = new ArrayList<>();
+
+        LocalDate firstDay = LocalDate.now().withDayOfMonth(1);
+        LocalDate lastDay = LocalDate.now();
+
+        for (LocalDate date = firstDay;
+             !date.isAfter(lastDay);
+             date = date.plusDays(1)) {
+
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+            int consumed = waterIntakeRepository
+                    .findAllByUserAndConsumedAtBetween(user, start, end)
+                    .stream()
+                    .mapToInt(WaterIntake::getAmount)
+                    .sum();
+
+            double progress = goal == 0
+                    ? 0
+                    : consumed * 100.0 / goal;
+
+            response.add(
+                    new MonthlyProgressResponse(
+                            date,
+                            consumed,
+                            goal,
+                            progress
+                    )
+            );
+        }
+
+        return response;
     }
 
     @Override
