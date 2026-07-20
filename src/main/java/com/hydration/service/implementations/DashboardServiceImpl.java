@@ -5,6 +5,7 @@ import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
 import com.hydration.repository.UserRepository;
 import com.hydration.repository.WaterIntakeRepository;
+import com.hydration.service.AuthenticatedUserService;
 import com.hydration.service.interfaces.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,29 +15,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
 
-    private final UserRepository userRepository;
+    private final AuthenticatedUserService authenticatedUserService;
     private final WaterIntakeRepository waterIntakeRepository;
-
-    private String getCurrentUsername() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-    }
-
-    private User getCurrentUser() {
-        return userRepository.findByUsername(getCurrentUsername())
-                .orElseThrow();
-    }
 
     @Override
     public DashboardResponse getDashboard() {
 
-        User user = getCurrentUser();
+        User user = authenticatedUserService.getCurrentUser();
 
         LocalDate today = LocalDate.now();
 
@@ -82,7 +74,7 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<WeeklyProgressResponse> getWeeklyProgress() {
 
-        User user = getCurrentUser();
+        User user = authenticatedUserService.getCurrentUser();
 
         int goal = user.getDailyGoal() == null
                 ? 0
@@ -123,7 +115,7 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<MonthlyProgressResponse> getMonthlyProgress() {
 
-        User user = getCurrentUser();
+        User user = authenticatedUserService.getCurrentUser();
 
         int goal = user.getDailyGoal() == null
                 ? 0
@@ -166,6 +158,67 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public StreakResponse getStreak() {
-        return null;
+
+        User user = authenticatedUserService.getCurrentUser();
+
+        int goal = user.getDailyGoal() == null
+                ? 0
+                : user.getDailyGoal();
+
+        if (goal == 0) {
+            return new StreakResponse(0, 0, 0);
+        }
+
+        List<WaterIntake> entries =
+                waterIntakeRepository.findAllByUserOrderByConsumedAtAsc(user);
+
+        Map<LocalDate, Integer> dailyTotals = new TreeMap<>();
+
+        for (WaterIntake intake : entries) {
+
+            LocalDate date = intake.getConsumedAt().toLocalDate();
+
+            dailyTotals.merge(
+                    date,
+                    intake.getAmount(),
+                    Integer::sum
+            );
+        }
+
+        int currentStreak = 0;
+        int longestStreak = 0;
+        int runningStreak = 0;
+        int achievedDays = 0;
+
+        for (Integer total : dailyTotals.values()) {
+
+            if (total >= goal) {
+                runningStreak++;
+                achievedDays++;
+                longestStreak = Math.max(longestStreak, runningStreak);
+            } else {
+                runningStreak = 0;
+            }
+        }
+
+        LocalDate date = LocalDate.now();
+
+        while (true) {
+
+            Integer total = dailyTotals.get(date);
+
+            if (total != null && total >= goal) {
+                currentStreak++;
+                date = date.minusDays(1);
+            } else {
+                break;
+            }
+        }
+
+        return new StreakResponse(
+                currentStreak,
+                longestStreak,
+                achievedDays
+        );
     }
 }
