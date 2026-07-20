@@ -6,12 +6,10 @@ import com.hydration.dto.response.ProfileResponse;
 import com.hydration.entity.User;
 import com.hydration.exception.EmailAlreadyExistsException;
 import com.hydration.exception.IncorrectPasswordException;
-import com.hydration.exception.InvalidCredentialsException;
 import com.hydration.repository.UserRepository;
+import com.hydration.service.AuthenticatedUserService;
 import com.hydration.service.interfaces.ProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,24 +17,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
-    private final UserRepository userRepository;
+    private final AuthenticatedUserService authenticatedUserService;
     private final PasswordEncoder passwordEncoder;
-
-    private String getCurrentUsername() {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        return authentication.getName();
-    }
+    private final UserRepository userRepository;
 
     @Override
     public ProfileResponse getProfile() {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         return new ProfileResponse(
                 user.getUsername(),
@@ -53,10 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse updateProfile(UpdateProfileRequest request) {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         if (!user.getEmail().equals(request.getEmail())
                 && userRepository.existsByEmail(request.getEmail())) {
@@ -83,11 +68,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void changePassword(ChangePasswordRequest request) {
-
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         if (!passwordEncoder.matches(
                 request.getOldPassword(),

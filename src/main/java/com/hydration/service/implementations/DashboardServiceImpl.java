@@ -3,12 +3,10 @@ package com.hydration.service.implementations;
 import com.hydration.dto.response.*;
 import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
-import com.hydration.repository.UserRepository;
 import com.hydration.repository.WaterIntakeRepository;
 import com.hydration.service.AuthenticatedUserService;
 import com.hydration.service.interfaces.DashboardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
