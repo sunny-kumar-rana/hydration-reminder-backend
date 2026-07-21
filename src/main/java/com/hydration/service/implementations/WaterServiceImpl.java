@@ -6,13 +6,11 @@ import com.hydration.dto.response.DailySummaryResponse;
 import com.hydration.dto.response.WaterResponse;
 import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
-import com.hydration.exception.InvalidCredentialsException;
 import com.hydration.exception.WaterIntakeNotFoundException;
-import com.hydration.repository.UserRepository;
 import com.hydration.repository.WaterIntakeRepository;
+import com.hydration.service.AuthenticatedUserService;
 import com.hydration.service.interfaces.WaterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,16 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaterServiceImpl implements WaterService {
 
-    private final UserRepository userRepository;
+    private final AuthenticatedUserService authenticatedUserService;
     private final WaterIntakeRepository waterIntakeRepository;
 
     @Override
     public WaterResponse addWater(AddWaterRequest request) {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         WaterIntake intake = new WaterIntake();
 
@@ -49,19 +44,10 @@ public class WaterServiceImpl implements WaterService {
         );
     }
 
-    private String getCurrentUsername() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-    }
-
     @Override
     public WaterResponse updateWater(Long id, UpdateWaterRequest request) {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         WaterIntake intake = waterIntakeRepository
                 .findByIdAndUser(id, user)
@@ -81,10 +67,7 @@ public class WaterServiceImpl implements WaterService {
     @Override
     public void deleteWater(Long id) {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         WaterIntake intake = waterIntakeRepository
                 .findByIdAndUser(id, user)
@@ -96,10 +79,7 @@ public class WaterServiceImpl implements WaterService {
     @Override
     public List<WaterResponse> getTodayWater() {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         LocalDate today = LocalDate.now();
 
@@ -120,10 +100,7 @@ public class WaterServiceImpl implements WaterService {
     @Override
     public List<WaterResponse> getHistory() {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         return waterIntakeRepository
                 .findAllByUserOrderByConsumedAtDesc(user)
@@ -139,10 +116,7 @@ public class WaterServiceImpl implements WaterService {
     @Override
     public DailySummaryResponse getDailySummary() {
 
-        String username = getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = authenticatedUserService.getCurrentUser();
 
         LocalDate today = LocalDate.now();
 
