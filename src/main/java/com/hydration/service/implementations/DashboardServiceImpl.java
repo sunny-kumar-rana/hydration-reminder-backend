@@ -1,6 +1,9 @@
 package com.hydration.service.implementations;
 
-import com.hydration.dto.response.*;
+import com.hydration.dto.response.DashboardResponse;
+import com.hydration.dto.response.MonthlyProgressResponse;
+import com.hydration.dto.response.StreakResponse;
+import com.hydration.dto.response.WeeklyProgressResponse;
 import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
 import com.hydration.repository.WaterIntakeRepository;
@@ -78,24 +81,19 @@ public class DashboardServiceImpl implements DashboardService {
                 ? 0
                 : user.getDailyGoal();
 
+        Map<LocalDate, Integer> dailyTotals = getDailyTotals(user);
+
         List<WeeklyProgressResponse> response = new ArrayList<>();
 
         for (int i = 6; i >= 0; i--) {
 
             LocalDate date = LocalDate.now().minusDays(i);
 
-            LocalDateTime start = date.atStartOfDay();
-            LocalDateTime end = date.plusDays(1).atStartOfDay();
-
-            int consumed = waterIntakeRepository
-                    .findAllByUserAndConsumedAtBetween(user, start, end)
-                    .stream()
-                    .mapToInt(WaterIntake::getAmount)
-                    .sum();
+            int consumed = dailyTotals.getOrDefault(date, 0);
 
             double progress = goal == 0
                     ? 0
-                    : consumed * 100.0 / goal;
+                    : (consumed * 100.0) / goal;
 
             response.add(
                     new WeeklyProgressResponse(
@@ -119,27 +117,23 @@ public class DashboardServiceImpl implements DashboardService {
                 ? 0
                 : user.getDailyGoal();
 
+        Map<LocalDate, Integer> dailyTotals = getDailyTotals(user);
+
         List<MonthlyProgressResponse> response = new ArrayList<>();
 
         LocalDate firstDay = LocalDate.now().withDayOfMonth(1);
+
         LocalDate lastDay = LocalDate.now();
 
         for (LocalDate date = firstDay;
              !date.isAfter(lastDay);
              date = date.plusDays(1)) {
 
-            LocalDateTime start = date.atStartOfDay();
-            LocalDateTime end = date.plusDays(1).atStartOfDay();
-
-            int consumed = waterIntakeRepository
-                    .findAllByUserAndConsumedAtBetween(user, start, end)
-                    .stream()
-                    .mapToInt(WaterIntake::getAmount)
-                    .sum();
+            int consumed = dailyTotals.getOrDefault(date, 0);
 
             double progress = goal == 0
                     ? 0
-                    : consumed * 100.0 / goal;
+                    : (consumed * 100.0) / goal;
 
             response.add(
                     new MonthlyProgressResponse(
@@ -167,47 +161,54 @@ public class DashboardServiceImpl implements DashboardService {
             return new StreakResponse(0, 0, 0);
         }
 
-        List<WaterIntake> entries =
-                waterIntakeRepository.findAllByUserOrderByConsumedAtAsc(user);
+        Map<LocalDate, Integer> dailyTotals = getDailyTotals(user);
 
-        Map<LocalDate, Integer> dailyTotals = new TreeMap<>();
-
-        for (WaterIntake intake : entries) {
-
-            LocalDate date = intake.getConsumedAt().toLocalDate();
-
-            dailyTotals.merge(
-                    date,
-                    intake.getAmount(),
-                    Integer::sum
-            );
+        if (dailyTotals.isEmpty()) {
+            return new StreakResponse(0, 0, 0);
         }
+
+        LocalDate firstDay = dailyTotals.keySet()
+                .stream()
+                .min(LocalDate::compareTo)
+                .orElse(LocalDate.now());
+
+        LocalDate today = LocalDate.now();
 
         int currentStreak = 0;
         int longestStreak = 0;
         int runningStreak = 0;
         int achievedDays = 0;
 
-        for (Integer total : dailyTotals.values()) {
+        for (LocalDate date = firstDay;
+             !date.isAfter(today);
+             date = date.plusDays(1)) {
 
-            if (total >= goal) {
-                runningStreak++;
+            int consumed = dailyTotals.getOrDefault(date, 0);
+
+            if (consumed >= goal) {
+
                 achievedDays++;
-                longestStreak = Math.max(longestStreak, runningStreak);
+                runningStreak++;
+
+                longestStreak = Math.max(
+                        longestStreak,
+                        runningStreak
+                );
+
             } else {
+
                 runningStreak = 0;
             }
         }
 
-        LocalDate date = LocalDate.now();
+        for (LocalDate date = today;
+             !date.isBefore(firstDay);
+             date = date.minusDays(1)) {
 
-        while (true) {
+            int consumed = dailyTotals.getOrDefault(date, 0);
 
-            Integer total = dailyTotals.get(date);
-
-            if (total != null && total >= goal) {
+            if (consumed >= goal) {
                 currentStreak++;
-                date = date.minusDays(1);
             } else {
                 break;
             }
@@ -218,5 +219,24 @@ public class DashboardServiceImpl implements DashboardService {
                 longestStreak,
                 achievedDays
         );
+    }
+
+    private Map<LocalDate, Integer> getDailyTotals(User user) {
+
+        List<WaterIntake> entries =
+                waterIntakeRepository.findAllByUserOrderByConsumedAtAsc(user);
+
+        Map<LocalDate, Integer> dailyTotals = new TreeMap<>();
+
+        for (WaterIntake intake : entries) {
+
+            dailyTotals.merge(
+                    intake.getConsumedAt().toLocalDate(),
+                    intake.getAmount(),
+                    Integer::sum
+            );
+        }
+
+        return dailyTotals;
     }
 }
