@@ -3,6 +3,7 @@ package com.hydration.repository;
 import com.hydration.entity.User;
 import com.hydration.entity.WaterIntake;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,17 @@ public interface WaterIntakeRepository extends JpaRepository<WaterIntake, Long> 
             LocalDateTime end
     );
 
+    @Query("""
+SELECT COALESCE(SUM(w.amount), 0)
+FROM WaterIntake w
+WHERE w.user = :user
+AND w.consumedAt BETWEEN :start AND :end
+""")
+    Integer getTotalConsumedBetween(
+            User user,
+            LocalDateTime start,
+            LocalDateTime end
+    );
 
     List<WaterIntake> findAllByUser(User user);
 
