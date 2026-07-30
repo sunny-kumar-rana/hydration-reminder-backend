@@ -1,262 +1,373 @@
-# 💧 Hydration Reminder
+# 💧 Hydration Tracker - Backend
 
-A full-stack hydration reminder application built with **Spring Boot** and **React.js**. The goal of this project is to help users build healthy hydration habits by sending scheduled reminders through multiple notification channels such as Email and Telegram.
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen)
+![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-success)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-This project is being developed incrementally while following industry-standard Spring Boot architecture and best practices.
-
----
-
-## 🚀 Tech Stack
-
-### Backend
-
-* Java 21
-* Spring Boot
-* Spring Data JPA
-* Spring Security
-* Hibernate
-* Oracle Database
-* Jakarta Bean Validation
-* Lombok
-* Maven
-
-### Frontend (Planned)
-
-* React.js
-* React Router
-* Axios
-* Tailwind CSS / Ant Design (TBD)
+A RESTful backend for the **Hydration Tracker** application built using **Spring Boot**. It provides secure JWT-based authentication, water intake tracking, hydration statistics, profile management, scheduled email reminders, and comprehensive REST APIs documented with Swagger.
 
 ---
 
-## 📁 Project Structure
+# ✨ Features
 
-```text
-src/main/java/com/hydration
+## 🔐 Authentication
 
-├── config
-│   └── SecurityConfig
-│
+- User Registration
+- User Login
+- JWT Authentication
+- BCrypt Password Encryption
+- Stateless Security
+- Protected REST APIs
+
+---
+
+## 👤 User Profile
+
+- View Profile
+- Update Email
+- Update Daily Water Goal
+- Update Timezone
+- Enable/Disable Email Notifications
+- Change Password
+
+---
+
+## 💧 Water Intake Management
+
+- Add Water Intake
+- Update Water Intake
+- Delete Water Intake
+- Today's Water Entries
+- Water History
+- Daily Water Summary
+
+---
+
+## 📊 Dashboard
+
+Provides:
+
+- Daily Goal
+- Water Consumed Today
+- Remaining Water
+- Daily Progress Percentage
+- Current Streak
+- Longest Streak
+- Today's Entry Count
+
+---
+
+## 📈 Statistics
+
+- Overall Statistics
+- Weekly Statistics
+- Monthly Statistics
+
+---
+
+## 📧 Email Notification System
+
+- Scheduled Hydration Reminder Emails
+- Goal Achievement Emails
+- User-controlled Email Notification Preference
+- Spring Scheduler Integration
+- JavaMailSender Integration
+
+---
+
+## 🛡 Security
+
+- Spring Security
+- JWT Authentication
+- Password Encryption
+- Endpoint Authorization
+- Stateless Sessions
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Usage |
+|------------|------|
+| Java 21 | Programming Language |
+| Spring Boot | Backend Framework |
+| Spring Security | Authentication & Authorization |
+| JWT | Secure Authentication |
+| Spring Data JPA | Database Access |
+| Hibernate | ORM |
+| PostgreSQL | Database |
+| Java Mail Sender | Email Notifications |
+| Spring Scheduler | Scheduled Tasks |
+| Bean Validation | Request Validation |
+| Swagger / OpenAPI | API Documentation |
+| Maven | Dependency Management |
+
+---
+
+# 🏗 Architecture
+
+```
+Client
+      │
+      ▼
+Controllers
+      │
+      ▼
+Services
+      │
+      ▼
+Repositories
+      │
+      ▼
+PostgreSQL
+```
+
+Project follows a layered architecture:
+
+```
+Controller
+     ↓
+Service
+     ↓
+Repository
+     ↓
+Database
+```
+
+---
+
+# 📂 Project Structure
+
+```
+src
 ├── controller
-│   └── UserController
-│
 ├── dto
-│   ├── RegisterRequest
-│   ├── RegisterResponse
-│   ├── LoginRequest
-│   ├── LoginResponse
-│   └── ErrorResponse
-│
+│   ├── request
+│   └── response
 ├── entity
-│   └── User
-│
-├── exception
-│   ├── UsernameAlreadyExistsException
-│   ├── EmailAlreadyExistsException
-│   ├── InvalidCredentialsException
-│   └── GlobalExceptionHandler
-│
 ├── repository
-│   └── UserRepository
-│
 ├── service
-│   └── UserService
-│
-└── HydrationReminderApplication
+│   ├── interfaces
+│   └── implementations
+├── scheduler
+├── security
+├── configuration
+├── exceptions
+└── mapper
 ```
 
 ---
 
-## ✅ Features Implemented
+# 🔑 API Modules
 
-### User Registration
-
-* User registration API
-* Username uniqueness validation
-* Email uniqueness validation
-* Request validation using Jakarta Validation
-* Global exception handling
-* Structured API responses
-* Oracle database integration
-
-### Authentication
-
-* Login using username
-* Password hashing using BCrypt
-* Password verification using `PasswordEncoder.matches()`
-* Secure authentication flow
-* Generic authentication failure responses to prevent username enumeration
-
-### Error Handling
-
-* Global exception handling using `@RestControllerAdvice`
-* Custom exceptions
-* Validation error handling
-* Proper HTTP status codes
+- Authentication
+- Profile
+- Water
+- Dashboard
+- Statistics
 
 ---
 
-## 📌 API Endpoints
+# 📚 Swagger Documentation
 
-### Register
+Swagger UI is enabled during development.
 
-```http
-POST /api/auth/register
 ```
-
-Example Request
-
-```json
-{
-  "username": "shubh123",
-  "email": "shubh123@gmail.com",
-  "password": "secret123"
-}
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-### Login
+# ⚙ Environment Variables
 
-```http
-POST /api/auth/login
+Configure the following inside `application.properties`.
+
+```properties
+# Database
+
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+# JPA
+
+spring.jpa.hibernate.ddl-auto=update
+
+# JWT
+
+jwt.secret=
+
+# Email
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=
+spring.mail.password=
+
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
 ```
 
-Example Request
+---
 
-```json
-{
-  "username": "shubh123",
-  "password": "secret123"
-}
+# 🚀 Running the Project
+
+## Clone Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/hydration-tracker-backend.git
 ```
 
 ---
 
-## 🗄 Database
+## Navigate
 
-Current User table fields:
-
-| Column           | Description                |
-| ---------------- | -------------------------- |
-| id               | Primary Key                |
-| username         | Unique Username            |
-| email            | Unique Email               |
-| password         | BCrypt Hashed Password     |
-| telegram_chat_id | Nullable                   |
-| created_at       | Account Creation Timestamp |
+```bash
+cd hydration-tracker-backend
+```
 
 ---
 
-## 🔒 Security
+## Install Dependencies
 
-* BCrypt password hashing
-* Passwords are never stored in plain text
-* Username enumeration protection
-* Generic login failure responses
-* Constructor-based dependency injection
-* Spring Security `PasswordEncoder`
+```bash
+mvn clean install
+```
 
 ---
 
-## 📚 Concepts Covered
+## Run
 
-* Layered Architecture
-* REST APIs
-* Dependency Injection
-* IoC Container
-* DTO Pattern
-* Repository Pattern
-* Constructor Injection
-* Bean Validation
-* Global Exception Handling
-* Spring Data JPA
-* Optional
-* ResponseEntity
-* BCrypt Password Hashing
-* Spring Configuration
-* Bean Creation
-* Custom Exceptions
+```bash
+mvn spring-boot:run
+```
+
+Application starts on
+
+```
+http://localhost:8080
+```
 
 ---
 
-## 🛠 Planned Features
+# 🔒 Authentication Flow
 
-### Authentication
-
-* JWT Authentication
-* Refresh Tokens
-* Remember Me
-
-### Hydration
-
-* Daily Water Intake Logging
-* Custom Daily Water Goal
-* Water Consumption History
-* Daily Statistics
-
-### Reminder System
-
-* Spring Scheduler
-* Custom Reminder Interval
-* Reminder History
-
-### Notifications
-
-* Telegram Bot Integration
-* Email Notifications
-* Multiple Notification Channels
-
-### Frontend
-
-* User Registration
-* Login
-* Dashboard
-* Water Intake Tracking
-* Reminder Settings
-* User Profile
-
-### Deployment
-
-* Docker
-* CI/CD
-* Cloud Deployment
-* Production Database
+```
+Register
+      ↓
+Login
+      ↓
+JWT Token Generated
+      ↓
+Store Token
+      ↓
+Include Bearer Token
+      ↓
+Access Protected APIs
+```
 
 ---
 
-## 🎯 Learning Goals
+# 📧 Reminder Flow
 
-This project focuses on building a production-style Spring Boot application while understanding every concept from first principles instead of simply copying code.
-
-Topics include:
-
-* Spring Boot Fundamentals
-* Spring Security
-* Authentication
-* REST API Design
-* Database Design
-* Backend Architecture
-* Full-Stack Development
-* Clean Code Practices
-
----
-
-## 📈 Current Progress
-
-* ✅ Project Setup
-* ✅ User Registration
-* ✅ Login Authentication
-* ✅ Password Encryption
-* ⏳ JWT Authentication
-* ⏳ Water Tracking
-* ⏳ Reminder Scheduling
-* ⏳ Telegram Integration
-* ⏳ React Frontend
-* ⏳ Deployment
+```
+Scheduler
+      ↓
+Find Eligible Users
+      ↓
+Email Notifications Enabled?
+      ↓
+Daily Goal Achieved?
+      ↓
+Send Reminder Email
+```
 
 ---
 
-## 👨‍💻 Author
+# ✅ Validation
 
-Built as a learning-focused full-stack project to explore modern Java backend development using Spring Boot and React while following production-oriented architecture and best practices.
+The backend validates incoming requests using Bean Validation.
+
+Examples include:
+
+- Required fields
+- Email format
+- Positive water intake
+- Password validation
+
+---
+
+# ❗ Global Exception Handling
+
+Centralized exception handling for:
+
+- Resource Not Found
+- Validation Errors
+- Authentication Errors
+- Duplicate Resources
+- Business Logic Exceptions
+
+---
+
+# 🧪 Testing
+
+You can test the APIs using:
+
+- Swagger UI
+- Postman
+- Bruno
+- Insomnia
+
+---
+
+# 🚀 Future Improvements
+
+- Telegram Notifications
+- Push Notifications
+- Reminder Time Customization
+- Weekly Email Reports
+- Export Reports (PDF/Excel)
+- Docker Support
+- CI/CD Pipeline
+- Cloud Deployment
+- Monitoring & Logging
+- Unit & Integration Tests
+
+---
+
+# 📸 Screenshots
+
+Add screenshots after deployment.
+
+Example:
+
+```
+screenshots/
+
+├── swagger.png
+├── login.png
+├── dashboard.png
+├── profile.png
+└── statistics.png
+```
+
+---
+
+# 👨‍💻 Author
+
+Developed as a portfolio project demonstrating modern backend development using:
+
+- Java
+- Spring Boot
+- Spring Security
+- JWT Authentication
+- PostgreSQL
+- JavaMailSender
+- REST APIs
+- Layered Architecture
+
+---
+
+# ⭐ If you found this project useful, consider giving it a star.
