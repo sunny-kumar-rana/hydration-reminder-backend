@@ -51,6 +51,7 @@ public class ProfileServiceImpl implements ProfileService {
         user.setEmail(request.getEmail());
         user.setDailyGoal(request.getDailyGoal());
         user.setTimezone(request.getTimezone());
+        user.setEmailNotificationEnabled(request.getEmailNotificationEnabled());
 
         User updatedUser = userRepository.save(user);
 
