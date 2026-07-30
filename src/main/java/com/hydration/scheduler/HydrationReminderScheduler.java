@@ -11,10 +11,8 @@ public class HydrationReminderScheduler {
 
     private final ReminderService reminderService;
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 0 8-20/2 * * *")
     public void scheduleHydrationReminders() {
-
         reminderService.sendHydrationReminders();
-
     }
 }
