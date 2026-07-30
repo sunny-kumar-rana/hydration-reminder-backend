@@ -22,4 +22,7 @@ public class UpdateProfileRequest {
 
     @NotBlank
     private String timezone;
+
+    @NotNull
+    private Boolean emailNotificationEnabled;
 }
