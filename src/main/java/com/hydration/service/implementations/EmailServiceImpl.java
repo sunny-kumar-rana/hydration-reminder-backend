@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendGoalAchievedEmail(String to, String username) {
+    public void sendGoalAchieved(String to, String username) {
 
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -52,5 +52,32 @@ public class EmailServiceImpl implements EmailService {
         );
 
         mailSender.send(message);
+    }
+
+    @Override
+    public void sendTestEmail(
+            String email,
+            String username
+    ) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(email);
+
+        message.setSubject("Hydration Tracker - Test Notification");
+
+        message.setText("""
+            Hi %s,
+
+            Your email notifications are working correctly.
+
+            You will receive hydration reminders at this email address.
+
+            💧 Happy Hydrating!
+            """
+                .formatted(username));
+
+        mailSender.send(message);
+
     }
 }
