@@ -8,7 +8,9 @@ import com.hydration.exception.EmailAlreadyExistsException;
 import com.hydration.exception.IncorrectPasswordException;
 import com.hydration.repository.UserRepository;
 import com.hydration.service.AuthenticatedUserService;
+import com.hydration.service.interfaces.EmailService;
 import com.hydration.service.interfaces.ProfileService;
+import com.hydration.service.interfaces.TelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class ProfileServiceImpl implements ProfileService {
     private final AuthenticatedUserService authenticatedUserService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final TelegramService telegramService;
 
     @Override
     public ProfileResponse getProfile() {
@@ -28,10 +32,10 @@ public class ProfileServiceImpl implements ProfileService {
 
         return new ProfileResponse(
                 user.getUsername(),
-                user.getEmail(),
                 user.getDailyGoal(),
-                user.getTelegramChatId(),
+                user.getEmail(),
                 user.getEmailNotificationEnabled(),
+                user.getTelegramChatId(),
                 user.getTelegramNotificationEnabled(),
                 user.getTimezone(),
                 user.getCreatedAt()
@@ -48,19 +52,21 @@ public class ProfileServiceImpl implements ProfileService {
             throw new EmailAlreadyExistsException();
         }
 
-        user.setEmail(request.getEmail());
         user.setDailyGoal(request.getDailyGoal());
         user.setTimezone(request.getTimezone());
+        user.setEmail(request.getEmail());
         user.setEmailNotificationEnabled(request.getEmailNotificationEnabled());
+        user.setTelegramChatId(request.getTelegramChatId());
+        user.setTelegramNotificationEnabled(request.getTelegramNotificationEnabled());
 
         User updatedUser = userRepository.save(user);
 
         return new ProfileResponse(
                 updatedUser.getUsername(),
-                updatedUser.getEmail(),
                 updatedUser.getDailyGoal(),
-                updatedUser.getTelegramChatId(),
+                updatedUser.getEmail(),
                 updatedUser.getEmailNotificationEnabled(),
+                updatedUser.getTelegramChatId(),
                 updatedUser.getTelegramNotificationEnabled(),
                 updatedUser.getTimezone(),
                 updatedUser.getCreatedAt()
@@ -83,5 +89,45 @@ public class ProfileServiceImpl implements ProfileService {
         );
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void sendTestEmail() {
+
+        User user = authenticatedUserService.getCurrentUser();
+
+        emailService.sendTestEmail(
+                user.getEmail(),
+                user.getUsername()
+        );
+
+    }
+
+    @Override
+    public void sendTestTelegram() {
+
+        User user = authenticatedUserService.getCurrentUser();
+
+        if (!Boolean.TRUE.equals(user.getTelegramNotificationEnabled())) {
+
+            throw new RuntimeException(
+                    "Telegram notifications are disabled."
+            );
+
+        }
+
+        if (user.getTelegramChatId() == null) {
+
+            throw new RuntimeException(
+                    "Telegram Chat ID not configured."
+            );
+
+        }
+
+        telegramService.sendTestMessage(
+                user.getTelegramChatId(),
+                user.getUsername()
+        );
+
     }
 }
