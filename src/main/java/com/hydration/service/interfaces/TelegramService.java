@@ -2,6 +2,10 @@ package com.hydration.service.interfaces;
 
 public interface TelegramService {
 
-    void sendMessage(Long chatId, String message);
+    void sendHydrationReminder(String chatId, String username, Integer consumed, Integer goal);
+
+    void sendGoalAchieved(String chatId, String username, Integer goal);
+
+    void sendTestMessage(String chatId, String username);
 
 }
