@@ -10,4 +10,8 @@ public interface ProfileService {
     ProfileResponse updateProfile(UpdateProfileRequest request);
 
     void changePassword(ChangePasswordRequest request);
+
+    void sendTestEmail();
+
+    void sendTestTelegram();
 }
