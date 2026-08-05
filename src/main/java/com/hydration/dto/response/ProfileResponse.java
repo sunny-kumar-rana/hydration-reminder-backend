@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProfileResponse {
     private String username;
-    private String email;
     private Integer dailyGoal;
-    private String telegramChatId;
+    private String email;
     private Boolean emailNotificationEnabled;
+    private String telegramChatId;
     private Boolean telegramNotificationEnabled;
     private String timezone;
     private LocalDateTime createdAt;
