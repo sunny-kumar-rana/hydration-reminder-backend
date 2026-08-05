@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProfileRequest {
-    @NotBlank
+
     @Email
     private String email;
 
@@ -25,4 +25,9 @@ public class UpdateProfileRequest {
 
     @NotNull
     private Boolean emailNotificationEnabled;
+
+    @NotNull
+    private Boolean telegramNotificationEnabled;
+
+    private String telegramChatId;
 }
