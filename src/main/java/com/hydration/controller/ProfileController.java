@@ -38,4 +38,22 @@ public class ProfileController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/test-email")
+    public ResponseEntity<String> testEmail() {
+
+        profileService.sendTestEmail();
+
+        return ResponseEntity.ok("Test email sent.");
+
+    }
+
+    @PostMapping("/test-telegram")
+    public ResponseEntity<String> testTelegram() {
+
+        profileService.sendTestTelegram();
+
+        return ResponseEntity.ok("Test Telegram notification sent.");
+
+    }
 }
