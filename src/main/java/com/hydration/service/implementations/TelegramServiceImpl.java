@@ -1,6 +1,7 @@
 package com.hydration.service.implementations;
 
 import com.hydration.service.interfaces.TelegramService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -8,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Service
 public class TelegramServiceImpl implements TelegramService {
 
@@ -37,6 +39,11 @@ public class TelegramServiceImpl implements TelegramService {
                 + encodedMessage;
 
         restTemplate.getForObject(url, String.class);
+
+        log.info(
+                "Telegram message sent successfully to chatId '{}'.",
+                chatId
+        );
 
     }
 
