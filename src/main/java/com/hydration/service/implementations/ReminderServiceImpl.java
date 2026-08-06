@@ -8,11 +8,13 @@ import com.hydration.service.interfaces.EmailService;
 import com.hydration.service.interfaces.ReminderService;
 import com.hydration.service.interfaces.TelegramService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +26,9 @@ public class ReminderServiceImpl implements ReminderService {
     private final EmailService emailService;
     private final TelegramService telegramService;
 
+    @Value("${app.reminder.interval.hours}")
+    private long reminderIntervalHours;
+
     @Override
     public void sendHydrationReminders() {
 
@@ -31,18 +36,33 @@ public class ReminderServiceImpl implements ReminderService {
 
         for (User user : users) {
 
-            ZoneId zone = ZoneId.of(user.getTimezone());
+            ZoneId zone;
+
+            try {
+
+                zone = ZoneId.of(user.getTimezone());
+
+            } catch (Exception ex) {
+
+                zone = ZoneId.systemDefault();
+
+            }
 
             LocalDate today = LocalDate.now(zone);
 
-            LocalDateTime start = today.atStartOfDay();
-            LocalDateTime end = today.plusDays(1).atStartOfDay();
+            ZonedDateTime start = today.atStartOfDay(zone);
+
+            ZonedDateTime end = start.plusDays(1);
+
+            LocalDateTime startTime = start.toLocalDateTime();
+
+            LocalDateTime endTime = end.toLocalDateTime();
 
             List<WaterIntake> todayEntries =
                     waterIntakeRepository.findAllByUserAndConsumedAtBetween(
                             user,
-                            start,
-                            end
+                            startTime,
+                            endTime
                     );
 
             int consumed = todayEntries.stream()
@@ -58,15 +78,57 @@ public class ReminderServiceImpl implements ReminderService {
             }
 
             if (consumed >= goal) {
+
+                if (!today.equals(user.getLastGoalNotificationDate())) {
+
+                    if (Boolean.TRUE.equals(user.getEmailNotificationEnabled())) {
+
+                        emailService.sendGoalAchieved(
+                                user.getEmail(),
+                                user.getUsername()
+                        );
+
+                    }
+
+                    if (Boolean.TRUE.equals(user.getTelegramNotificationEnabled())
+                            && user.getTelegramChatId() != null) {
+
+                        telegramService.sendGoalAchieved(
+                                user.getTelegramChatId(),
+                                user.getUsername(),
+                                goal
+                        );
+
+                    }
+
+                    user.setLastGoalNotificationDate(today);
+
+                    userRepository.save(user);
+
+                }
+
                 continue;
+
             }
 
             if (Boolean.TRUE.equals(user.getEmailNotificationEnabled())) {
+
+                if(user.getLastReminderSentAt()!=null &&
+                        user.getLastReminderSentAt()
+                                .isAfter(LocalDateTime.now().minusHours(reminderIntervalHours))){
+
+                    continue;
+
+                }
 
                 emailService.sendHydrationReminder(
                         user.getEmail(),
                         user.getUsername()
                 );
+
+                user.setLastReminderSentAt(LocalDateTime.now());
+
+                userRepository.save(user);
 
             }
 
