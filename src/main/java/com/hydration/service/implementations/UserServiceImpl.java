@@ -12,9 +12,11 @@ import com.hydration.repository.UserRepository;
 import com.hydration.security.JwtService;
 import com.hydration.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -38,6 +40,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         User savedUser = userRepository.save(user);
 
+        log.info(
+                "New user registered with username '{}'.",
+                user.getUsername()
+        );
+
         RegisterResponse response = new RegisterResponse();
         response.setUsername(savedUser.getUsername());
         response.setMessage("user "+savedUser.getUsername()+" Registered Successfully");
@@ -51,6 +58,12 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException();
         }
         String token = jwtService.generateToken(user.getUsername());
+
+        log.info(
+                "User '{}' logged in successfully.",
+                user.getUsername()
+        );
+
         return new LoginResponse(
                 user.getUsername(),
                 token,
