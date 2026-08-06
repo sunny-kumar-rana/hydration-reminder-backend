@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -54,4 +55,10 @@ public class User {
 
     @Column(nullable = false)
     private String timezone;
+
+    @Column(name = "last_goal_notification_date")
+    private LocalDate lastGoalNotificationDate;
+
+    @Column(name = "last_reminder_sent_at")
+    private LocalDateTime lastReminderSentAt;
 }
