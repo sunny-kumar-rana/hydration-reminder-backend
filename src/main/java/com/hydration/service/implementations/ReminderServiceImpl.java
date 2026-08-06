@@ -8,6 +8,7 @@ import com.hydration.service.interfaces.EmailService;
 import com.hydration.service.interfaces.ReminderService;
 import com.hydration.service.interfaces.TelegramService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReminderServiceImpl implements ReminderService {
@@ -31,8 +33,11 @@ public class ReminderServiceImpl implements ReminderService {
 
     @Override
     public void sendHydrationReminders() {
+        log.info("Hydration reminder scheduler started.");
 
         List<User> users = userRepository.findAllByEmailNotificationEnabledTrueOrTelegramNotificationEnabledTrue();
+
+        log.info("Found {} users eligible for notifications.", users.size());
 
         for (User user : users) {
 
@@ -105,6 +110,18 @@ public class ReminderServiceImpl implements ReminderService {
 
                     userRepository.save(user);
 
+                    log.info(
+                            "Goal achievement notification sent to user '{}'.",
+                            user.getUsername()
+                    );
+
+                } else {
+
+                    log.info(
+                            "Skipping goal notification for '{}'. Already notified today.",
+                            user.getUsername()
+                    );
+
                 }
 
                 continue;
@@ -117,12 +134,21 @@ public class ReminderServiceImpl implements ReminderService {
                         user.getLastReminderSentAt()
                                 .isAfter(LocalDateTime.now().minusHours(reminderIntervalHours))){
 
+                    log.info(
+                            "Skipping reminder for '{}'. Reminder sent recently.",
+                            user.getUsername()
+                    );
                     continue;
 
                 }
 
                 emailService.sendHydrationReminder(
                         user.getEmail(),
+                        user.getUsername()
+                );
+
+                log.info(
+                        "Hydration reminder sent to user '{}' via email notification.",
                         user.getUsername()
                 );
 
@@ -142,7 +168,14 @@ public class ReminderServiceImpl implements ReminderService {
                         goal
                 );
 
+                log.info(
+                        "Hydration reminder sent to user '{}'  via telegram notification.",
+                        user.getUsername()
+                );
+
             }
         }
+
+        log.info("Hydration reminder scheduler finished.");
     }
 }
