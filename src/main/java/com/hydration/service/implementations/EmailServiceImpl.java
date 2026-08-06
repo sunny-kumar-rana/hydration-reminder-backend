@@ -2,11 +2,14 @@ package com.hydration.service.implementations;
 
 import com.hydration.service.interfaces.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -33,6 +36,11 @@ public class EmailServiceImpl implements EmailService {
         );
 
         mailSender.send(message);
+
+        log.info(
+                "Email sent successfully to '{}'.",
+                to
+        );
     }
 
     @Override
@@ -78,6 +86,11 @@ public class EmailServiceImpl implements EmailService {
                 .formatted(username));
 
         mailSender.send(message);
+
+        log.info(
+                "Test Email sent successfully to '{}'.",
+                email
+        );
 
     }
 }
