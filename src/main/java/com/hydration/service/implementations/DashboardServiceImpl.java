@@ -68,7 +68,8 @@ public class DashboardServiceImpl implements DashboardService {
                 progress,
                 todayEntryCount,
                 streak.getCurrentStreak(),
-                streak.getLongestStreak()
+                streak.getLongestStreak(),
+                user.getUsername()
         );
     }
 
