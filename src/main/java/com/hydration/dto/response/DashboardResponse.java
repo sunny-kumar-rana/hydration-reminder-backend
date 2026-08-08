@@ -24,4 +24,6 @@ public class DashboardResponse {
     private Integer currentStreak;
 
     private Integer longestStreak;
+
+    private String username;
 }
