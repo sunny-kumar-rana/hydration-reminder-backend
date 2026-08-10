@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Service
@@ -27,16 +25,13 @@ public class TelegramServiceImpl implements TelegramService {
 
     private void sendMessage(String chatId, String message) {
 
-        String encodedMessage =
-                URLEncoder.encode(message, StandardCharsets.UTF_8);
-
-        String url = apiUrl
-                + "/bot"
-                + botToken
-                + "/sendMessage?chat_id="
-                + chatId
-                + "&text="
-                + encodedMessage;
+        String url = UriComponentsBuilder
+                .fromUriString(apiUrl + "/bot" + botToken + "/sendMessage")
+                .queryParam("chat_id", chatId)
+                .queryParam("text", message)
+                .build()
+                .encode()
+                .toUriString();
 
         restTemplate.getForObject(url, String.class);
 
@@ -44,7 +39,6 @@ public class TelegramServiceImpl implements TelegramService {
                 "Telegram message sent successfully to chatId '{}'.",
                 chatId
         );
-
     }
 
     @Override
