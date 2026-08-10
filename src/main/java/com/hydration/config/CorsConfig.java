@@ -18,7 +18,7 @@ public class CorsConfig {
 
         configuration.setAllowedOrigins(
                 List.of("http://localhost:5173",
-                        "https://hydration-tracker-frontend.vercel.app")
+                        "https://hydrationer.vercel.app/")
         );
 
         configuration.setAllowedMethods(
