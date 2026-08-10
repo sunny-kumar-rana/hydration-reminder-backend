@@ -16,7 +16,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${mail.from}")
     private String from;
 
     @Override
@@ -63,26 +63,24 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTestEmail(
-            String email,
-            String username
-    ) {
+    public void sendTestEmail(String email, String username) {
 
         SimpleMailMessage message = new SimpleMailMessage();
 
+        message.setFrom(from);
         message.setTo(email);
 
         message.setSubject("Hydration Tracker - Test Notification");
 
         message.setText("""
-            Hi %s,
+        Hi %s,
 
-            Your email notifications are working correctly.
+        Your email notifications are working correctly.
 
-            You will receive hydration reminders at this email address.
+        You will receive hydration reminders at this email address.
 
-            💧 Happy Hydrating!
-            """
+        💧 Happy Hydrating!
+        """
                 .formatted(username));
 
         mailSender.send(message);
@@ -91,6 +89,5 @@ public class EmailServiceImpl implements EmailService {
                 "Test Email sent successfully to '{}'.",
                 email
         );
-
     }
 }
