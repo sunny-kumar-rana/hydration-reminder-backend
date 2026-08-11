@@ -25,15 +25,20 @@ public class TelegramServiceImpl implements TelegramService {
 
     private void sendMessage(String chatId, String message) {
 
-        String url = UriComponentsBuilder
-                .fromUriString(apiUrl + "/bot" + botToken + "/sendMessage")
-                .queryParam("chat_id", chatId)
-                .queryParam("text", message)
-                .build()
-                .encode()
-                .toUriString();
+        String url = apiUrl
+                + "/bot"
+                + botToken
+                + "/sendMessage";
 
-        restTemplate.getForObject(url, String.class);
+        restTemplate.getForObject(
+                UriComponentsBuilder
+                        .fromUriString(url)
+                        .queryParam("chat_id", chatId)
+                        .queryParam("text", message)
+                        .build(false)
+                        .toUri(),
+                String.class
+        );
 
         log.info(
                 "Telegram message sent successfully to chatId '{}'.",
