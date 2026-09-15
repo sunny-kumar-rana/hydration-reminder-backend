@@ -56,7 +56,15 @@ public class ProfileServiceImpl implements ProfileService {
         user.setTimezone(request.getTimezone());
         user.setEmail(request.getEmail());
         user.setEmailNotificationEnabled(request.getEmailNotificationEnabled());
-        user.setTelegramChatId(request.getTelegramChatId());
+
+        String telegramChatId = request.getTelegramChatId();
+
+        if (telegramChatId != null && telegramChatId.isBlank()) {
+            telegramChatId = null;
+        }
+
+        user.setTelegramChatId(telegramChatId);
+
         user.setTelegramNotificationEnabled(request.getTelegramNotificationEnabled());
 
         User updatedUser = userRepository.save(user);
