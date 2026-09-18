@@ -1,21 +1,22 @@
-# 💧 Hydration Tracker - Backend
+# 💧 Hydration Tracker — Backend
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.6-brightgreen)
 ![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-success)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 ![Docker](https://img.shields.io/badge/Docker-Deployment-blue)
+![Tests](https://img.shields.io/badge/Tests-51_passing-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-A RESTful backend for the **Hydration Tracker** application built using **Java 21 and Spring Boot**.
+A production-deployed REST API for a full-stack **Hydration Tracker** application built with **Java 21 and Spring Boot 4**.
 
-The backend provides secure JWT-based authentication, water intake tracking, hydration statistics, profile management, scheduled notifications, and REST APIs documented with Swagger/OpenAPI.
+The backend provides JWT-based authentication, user management, water intake tracking, hydration analytics, scheduled notifications, and REST APIs documented with Swagger/OpenAPI.
 
-The application is deployed in production using **Docker on Render**, with **Neon PostgreSQL** as the production database.
+The application is containerized with Docker and deployed on **Render**, with **Neon PostgreSQL** as the production database.
 
 ---
 
-# 🚀 Live Application
+## 🚀 Live Application
 
 **[Hydration Tracker](https://hydrationer.vercel.app/)**
 
@@ -23,131 +24,111 @@ The React frontend communicates with this Spring Boot backend through REST APIs.
 
 ---
 
-# ✨ Features
+## ✨ Features
 
-## 🔐 Authentication
+### 🔐 Authentication & Security
 
-* User Registration
-* User Login
-* JWT Authentication
-* BCrypt Password Hashing
-* Stateless Security
-* Protected REST APIs
-* Endpoint Authorization
+- User registration and login
+- JWT-based authentication
+- BCrypt password hashing
+- Stateless Spring Security configuration
+- Protected REST endpoints
+- Endpoint authorization
+- Environment-based secret configuration
+- Production CORS configuration
 
----
+### 👤 Profile Management
 
-## 👤 User Profile
+- View profile
+- Update email
+- Update daily hydration goal
+- Update timezone
+- Enable/disable email notifications
+- Enable/disable Telegram notifications
+- Change password
+- Test email notifications
+- Test Telegram notifications
 
-* View Profile
-* Update Email
-* Update Daily Water Goal
-* Update Timezone
-* Enable/Disable Email Notifications
-* Enable/Disable Telegram Notifications
-* Change Password
-* Test Email Notifications
-* Test Telegram Notifications
+### 💧 Water Intake Management
 
----
+- Add water intake
+- Update water intake
+- Delete water intake
+- View today's entries
+- View water intake history
+- Daily water summary
+- Custom water amounts
+- Request validation for water intake values
 
-## 💧 Water Intake Management
-
-* Add Water Intake
-* Update Water Intake
-* Delete Water Intake
-* Today's Water Entries
-* Water History
-* Daily Water Summary
-* Custom Water Amounts
-
----
-
-## 📊 Dashboard
+### 📊 Dashboard
 
 Provides:
 
-* Daily Goal
-* Water Consumed Today
-* Remaining Water
-* Daily Progress Percentage
-* Current Streak
-* Longest Streak
-* Today's Entry Count
+- Daily hydration goal
+- Water consumed today
+- Remaining water
+- Progress percentage
+- Today's entry count
+- Current streak
+- Longest streak
+
+### 📈 Statistics
+
+- Overall hydration statistics
+- Weekly statistics
+- Monthly statistics
+- Progress tracking
+
+### 📧 Email Notifications
+
+- Scheduled hydration reminders
+- Daily goal achievement notifications
+- User-controlled email notification preference
+- Test email endpoint
+- Spring Scheduler integration
+- JavaMailSender
+- Brevo SMTP integration
+
+### 📱 Telegram Notifications
+
+- Scheduled hydration reminders
+- Goal achievement notifications
+- User-controlled Telegram notification preference
+- Test Telegram notification endpoint
+- Telegram Bot API integration
 
 ---
 
-## 📈 Statistics
+## 🛠 Tech Stack
 
-* Overall Statistics
-* Weekly Statistics
-* Monthly Statistics
-
----
-
-## 📧 Email Notification System
-
-* Scheduled Hydration Reminder Emails
-* Daily Goal Achievement Emails
-* User-controlled Email Notification Preference
-* Test Email Notifications
-* Spring Scheduler Integration
-* JavaMailSender Integration
-* Brevo SMTP Integration
-
-Email delivery uses **Brevo SMTP** in the production environment.
-
----
-
-## 📱 Telegram Notifications
-
-* Scheduled Hydration Reminder Messages
-* Goal Achievement Messages
-* User-controlled Telegram Notification Preference
-* Test Telegram Notifications
-* Telegram Bot API Integration
+| Technology | Purpose |
+|---|---|
+| **Java 21** | Programming language |
+| **Spring Boot 4.0.6** | Backend framework |
+| **Spring Web MVC** | REST API development |
+| **Spring Security** | Authentication and authorization |
+| **JWT** | Stateless authentication |
+| **BCrypt** | Password hashing |
+| **Spring Data JPA** | Data persistence |
+| **Hibernate** | ORM |
+| **PostgreSQL** | Relational database |
+| **Bean Validation** | Request validation |
+| **Spring Mail** | Email integration |
+| **JavaMailSender** | Email delivery |
+| **Brevo SMTP** | Production email delivery |
+| **Telegram Bot API** | Telegram notifications |
+| **Spring Scheduler** | Scheduled reminders |
+| **Swagger / OpenAPI** | API documentation |
+| **Maven** | Build and dependency management |
+| **Docker** | Containerization |
+| **Render** | Backend deployment |
+| **Neon PostgreSQL** | Production database |
+| **JUnit / Mockito** | Automated testing |
+| **Testcontainers** | PostgreSQL integration testing |
 
 ---
 
-# 🛡 Security
-
-* Spring Security
-* JWT Authentication
-* BCrypt Password Hashing
-* Protected API Endpoints
-* Stateless Sessions
-* Environment-based Secrets
-* Production CORS Configuration
-
-Sensitive credentials are stored using environment variables rather than being committed to source control.
-
----
-
-# 🛠 Tech Stack
-
-| Technology        | Usage                          |
-| ----------------- | ------------------------------ |
-| Java 21           | Programming Language           |
-| Spring Boot 4.0.6 | Backend Framework              |
-| Spring Security   | Authentication & Authorization |
-| JWT               | Secure Authentication          |
-| Spring Data JPA   | Database Access                |
-| Hibernate         | ORM                            |
-| PostgreSQL        | Database                       |
-| Neon PostgreSQL   | Production Database            |
-| JavaMailSender    | Email Notifications            |
-| Brevo SMTP        | Production Email Delivery      |
-| Telegram Bot API  | Telegram Notifications         |
-| Spring Scheduler  | Scheduled Notifications        |
-| Bean Validation   | Request Validation             |
-| Swagger / OpenAPI | API Documentation              |
-| Maven             | Dependency Management          |
-| Docker            | Production Deployment          |
-| Render            | Backend Hosting                |
-
----
-
-# 🏗 Architecture
+## 🏗 Architecture
 
 ```text
                          ┌─────────────────────┐
@@ -160,7 +141,7 @@ Sensitive credentials are stored using environment variables rather than being c
                          │       Vercel        │
                          └──────────┬──────────┘
                                     │
-                              REST / JSON
+                               REST / JSON
                                     │
                                     ▼
                          ┌─────────────────────┐
@@ -182,56 +163,72 @@ Sensitive credentials are stored using environment variables rather than being c
                                └──────────────┘          └──────────────┘
 ```
 
-The backend follows a layered architecture:
+### Backend Architecture
+
+The application follows a layered architecture:
 
 ```text
+Client
+  ↓
 Controller
-     ↓
+  ↓
 Service
-     ↓
+  ↓
 Repository
-     ↓
-Database
+  ↓
+PostgreSQL
 ```
+
+Cross-cutting concerns such as security, validation, exception handling, scheduling, and external notification services are handled within their respective application layers.
 
 ---
 
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```text
-src
-├── controller
-├── dto
-│   ├── request
-│   └── response
-├── entity
-├── repository
-├── service
-│   ├── interfaces
-│   └── implementations
-├── scheduler
-├── security
-├── configuration
-├── exceptions
-└── mapper
+src/
+├── main/
+│   ├── java/com/hydration/
+│   │   ├── config/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   │   ├── request/
+│   │   │   └── response/
+│   │   ├── entity/
+│   │   ├── repository/
+│   │   ├── scheduler/
+│   │   ├── security/
+│   │   └── service/
+│   │       ├── interfaces/
+│   │       └── implementations/
+│   └── resources/
+│       └── application.properties
+│
+└── test/
+    └── java/com/hydration/
+        ├── controller/
+        ├── service/
+        └── HydrationReminderApplicationTests.java
 ```
 
 ---
 
-# 🔑 API Modules
+## 🔑 API Modules
 
-* Authentication
-* Profile
-* Water Intake
-* Dashboard
-* Statistics
-* Notifications
+| Module | Functionality |
+|---|---|
+| **Authentication** | Registration and login |
+| **Profile** | Profile management and notification settings |
+| **Water** | Water intake CRUD and history |
+| **Dashboard** | Daily progress and hydration overview |
+| **Statistics** | Weekly, monthly, and overall statistics |
+| **Notifications** | Email and Telegram notification functionality |
 
 ---
 
-# 📚 API Documentation
+## 📚 API Documentation
 
-Swagger/OpenAPI is available for API exploration and testing.
+The API is documented using **Swagger/OpenAPI**.
 
 ### Local
 
@@ -239,109 +236,88 @@ Swagger/OpenAPI is available for API exploration and testing.
 http://localhost:8080/swagger-ui/index.html
 ```
 
-The production API is deployed on Render.
+Swagger UI can be used to explore and test the available REST endpoints.
 
 ---
 
-# ⚙️ Environment Variables
+## 🧪 Testing
 
-Sensitive configuration is supplied through environment variables.
+The backend contains **51 automated tests** covering application startup, service-layer business logic, request validation, and controller behavior.
 
-Example:
-
-```properties
-# Database
-
-DB_URL=
-DB_USERNAME=
-DB_PASSWORD=
-
-# JWT
-
-JWT_SECRET=
-
-# Email - Brevo SMTP
-
-MAIL_HOST=smtp-relay.brevo.com
-MAIL_PORT=2525
-MAIL_USERNAME=
-MAIL_PASSWORD=
-MAIL_FROM=
-
-# Telegram
-
-TELEGRAM_BOT_TOKEN=
-TELEGRAM_API_URL=https://api.telegram.org
-
-# Scheduler
-
-REMINDER_INTERVAL=
-
-# Server
-
-PORT=
-```
-
-The `.env` file should **never be committed to Git**.
-
----
-
-# 🚀 Running Locally
-
-## Prerequisites
-
-* Java 21+
-* Maven
-* PostgreSQL
-* Node.js for the frontend
-
----
-
-## Clone Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/hydration-tracker-backend.git
-```
-
----
-
-## Navigate to the Project
-
-```bash
-cd hydration-tracker-backend
-```
-
----
-
-## Configure Environment Variables
-
-Create a local `.env` file or configure the required environment variables in your development environment.
-
----
-
-## Install Dependencies
-
-```bash
-mvn clean install
-```
-
----
-
-## Run
-
-```bash
-mvn spring-boot:run
-```
-
-The backend starts on:
+### Test Suite
 
 ```text
-http://localhost:8080
+Service / Application Tests
+├── UserServiceImplTest
+├── WaterServiceImplTest
+├── ProfileServiceImplTest
+└── HydrationReminderApplicationTests
+
+Controller Tests
+├── AuthControllerTest
+├── WaterControllerTest
+├── ProfileControllerTest
+├── DashboardControllerTest
+└── StatisticsControllerTest
+```
+
+### Testing Technologies
+
+- JUnit
+- Mockito
+- Spring Boot Test
+- Spring MVC Test
+- Testcontainers
+- PostgreSQL
+
+Integration testing uses a temporary PostgreSQL container rather than relying on the developer's local database.
+
+### Run Tests
+
+```bash
+mvn test
+```
+
+Current test result:
+
+```text
+Tests run: 51
+Failures: 0
+Errors: 0
+Skipped: 0
+BUILD SUCCESS
 ```
 
 ---
 
-# 🔒 Authentication Flow
+## 🔒 Validation & Exception Handling
+
+### Bean Validation
+
+Incoming API requests are validated using Jakarta Bean Validation.
+
+Examples include:
+
+- Required fields
+- Email format validation
+- Username constraints
+- Password constraints
+- Water intake amount limits
+- Profile data validation
+
+### Global Exception Handling
+
+Centralized exception handling provides consistent API responses for:
+
+- Resource not found
+- Validation errors
+- Authentication errors
+- Duplicate resources
+- Business logic exceptions
+
+---
+
+## 🔑 Authentication Flow
 
 ```text
 Register
@@ -350,18 +326,20 @@ Login
    ↓
 JWT Token Generated
    ↓
-Frontend Stores Token
+Frontend Sends Bearer Token
    ↓
-Bearer Token Added to Requests
+JWT Authentication Filter
    ↓
-Spring Security Validates Token
+Spring Security
    ↓
-Protected API Access
+Protected REST Endpoint
+   ↓
+Controller → Service → Repository
 ```
 
 ---
 
-# 📧 Email Notification Flow
+## 📧 Email Notification Flow
 
 ```text
 Spring Scheduler
@@ -381,7 +359,7 @@ Recipient
 
 ---
 
-# 📱 Telegram Notification Flow
+## 📱 Telegram Notification Flow
 
 ```text
 Spring Scheduler
@@ -399,9 +377,9 @@ User's Telegram Chat
 
 ---
 
-# ⏰ Scheduled Notifications
+## ⏰ Scheduled Notifications
 
-The application uses **Spring Scheduler** to periodically check users who are eligible for hydration reminders.
+The application uses **Spring Scheduler** to periodically identify users who are eligible for hydration reminders.
 
 The reminder interval is configurable through:
 
@@ -409,99 +387,153 @@ The reminder interval is configurable through:
 REMINDER_INTERVAL=
 ```
 
-Users can control whether they receive email and Telegram notifications through their profile settings.
+Users can independently control email and Telegram notifications through their profile settings.
 
 ---
 
-# ✅ Validation
+## ⚙️ Environment Variables
 
-The backend validates incoming requests using **Bean Validation**.
+Sensitive configuration is supplied through environment variables.
 
-Examples include:
+Example:
 
-* Required fields
-* Email format validation
-* Positive water intake values
-* Password validation
-* Request data validation
+```properties
+# Database
+DB_URL=
+DB_USERNAME=
+DB_PASSWORD=
 
----
+# JWT
+JWT_SECRET=
 
-# ❗ Global Exception Handling
+# Email - Brevo SMTP
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=2525
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_FROM=
 
-Centralized exception handling provides consistent API responses for:
+# Telegram
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_API_URL=https://api.telegram.org
 
-* Resource Not Found
-* Validation Errors
-* Authentication Errors
-* Duplicate Resources
-* Business Logic Exceptions
+# Scheduler
+REMINDER_INTERVAL=
 
----
+# Server
+PORT=
+```
 
-# 🧪 Testing
-
-The APIs can be tested using:
-
-* Swagger UI
-* Postman
-* Bruno
-* Insomnia
-
-The production application can also be tested directly through the deployed frontend.
+**Never commit `.env` or production credentials to Git.**
 
 ---
 
-# 🌐 Deployment
+## 🚀 Running Locally
 
-## Frontend
+### Prerequisites
 
-The React frontend is deployed using **Vercel**.
+- Java 21+
+- Maven
+- PostgreSQL
 
-**Live Application:**
+### Clone Repository
 
-https://hydrationer.vercel.app/
+```bash
+git clone https://github.com/sunny-kumar-rana/hydration-reminder-backend.git
+```
 
-## Backend
+### Navigate to the Project
 
-The Spring Boot backend is containerized using **Docker** and deployed on **Render**.
+```bash
+cd hydration-reminder-backend
+```
 
-## Database
+### Configure Environment Variables
 
-The production database is hosted on **Neon PostgreSQL**.
+Create a local `.env` file or configure the required environment variables in your development environment.
 
-## Email
+### Build the Application
+
+```bash
+mvn clean install
+```
+
+### Run the Application
+
+```bash
+mvn spring-boot:run
+```
+
+The backend starts on:
+
+```text
+http://localhost:8080
+```
+
+Swagger UI:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+---
+
+## 🐳 Docker
+
+The backend includes a `Dockerfile` for containerized deployment.
+
+### Build the Image
+
+```bash
+docker build -t hydration-reminder-backend .
+```
+
+### Run the Container
+
+```bash
+docker run -p 8080:8080 \
+  -e DB_URL="..." \
+  -e DB_USERNAME="..." \
+  -e DB_PASSWORD="..." \
+  -e JWT_SECRET="..." \
+  hydration-reminder-backend
+```
+
+Additional environment variables are required when enabling email and Telegram integrations.
+
+---
+
+## 🌐 Deployment
+
+### Frontend
+
+The React frontend is deployed on **Vercel**.
+
+Live application:
+
+**[Hydration Tracker](https://hydrationer.vercel.app/)**
+
+### Backend
+
+The Spring Boot application is containerized using **Docker** and deployed on **Render**.
+
+### Database
+
+Production data is stored in **Neon PostgreSQL**.
+
+### Email
 
 Production email delivery uses **Brevo SMTP**.
 
-## Telegram
+### Telegram
 
 Telegram notifications use the **Telegram Bot API**.
 
 ---
 
-# 🔮 Future Improvements
+## 📸 Screenshots
 
-Potential future improvements include:
-
-* Password Reset / Forgot Password
-* Custom Reminder Times
-* Weekly Email Reports
-* More Detailed Hydration Analytics
-* PDF/Excel Report Export
-* Push Notifications
-* Mobile Application
-* Progressive Web App Support
-* Automated Unit & Integration Testing
-* CI/CD Pipeline
-* Application Monitoring
-* Improved Accessibility
-
----
-
-# 📸 Screenshots
-
-Recommended screenshots for the repository:
+Recommended repository screenshots:
 
 ```text
 screenshots/
@@ -515,26 +547,38 @@ screenshots/
 
 ---
 
-# 👨‍💻 Author
+## 🔮 Future Improvements
 
-Developed as a full-stack portfolio project demonstrating:
+Potential future improvements include:
 
-* Java
-* Spring Boot
-* Spring Security
-* JWT Authentication
-* Spring Data JPA
-* PostgreSQL
-* REST API Development
-* React Integration
-* Email Notifications
-* Telegram Notifications
-* Scheduled Tasks
-* Docker
-* Cloud Deployment
+- Password reset / forgot password
+- Custom reminder times
+- Weekly email reports
+- More detailed hydration analytics
+- PDF/Excel report export
+- Push notifications
+- Mobile application
+- Progressive Web App support
+- CI/CD pipeline
+- Application monitoring
+- Improved accessibility
 
 ---
 
-# ⭐ License
+## 👨‍💻 Author
 
-This project is licensed under the MIT License.
+Developed as a full-stack portfolio project demonstrating:
+
+- REST API development
+- Spring Boot backend architecture
+- JWT authentication and authorization
+- PostgreSQL persistence
+- Request validation
+- Scheduled background processing
+- Email and Telegram integrations
+- Automated unit and integration testing
+- Docker containerization
+- Cloud deployment
+
+**GitHub:**  
+https://github.com/sunny-kumar-rana
