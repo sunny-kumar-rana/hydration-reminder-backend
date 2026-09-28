@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,8 @@ public class DashboardServiceImpl implements DashboardService {
 
         User user = authenticatedUserService.getCurrentUser();
 
-        LocalDate today = LocalDate.now();
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
+        LocalDate today = LocalDate.now(zone);
 
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
@@ -86,9 +88,10 @@ public class DashboardServiceImpl implements DashboardService {
 
         List<WeeklyProgressResponse> response = new ArrayList<>();
 
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
         for (int i = 6; i >= 0; i--) {
 
-            LocalDate date = LocalDate.now().minusDays(i);
+            LocalDate date = LocalDate.now(zone).minusDays(i);
 
             int consumed = dailyTotals.getOrDefault(date, 0);
 
@@ -122,9 +125,11 @@ public class DashboardServiceImpl implements DashboardService {
 
         List<MonthlyProgressResponse> response = new ArrayList<>();
 
-        LocalDate firstDay = LocalDate.now().withDayOfMonth(1);
+        ZoneId zone = ZoneId.of(user.getTimezone());
 
-        LocalDate lastDay = LocalDate.now();
+        LocalDate firstDay = LocalDate.now(zone).withDayOfMonth(1);
+
+        LocalDate lastDay = LocalDate.now(zone);
 
         for (LocalDate date = firstDay;
              !date.isAfter(lastDay);
@@ -202,7 +207,9 @@ public class DashboardServiceImpl implements DashboardService {
             }
         }
 
-        for (LocalDate date = today;
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
+
+        for (LocalDate date = LocalDate.now(zone);
              !date.isBefore(firstDay);
              date = date.minusDays(1)) {
 

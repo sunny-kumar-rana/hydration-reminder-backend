@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -33,7 +34,8 @@ public class WaterServiceImpl implements WaterService {
 
         intake.setUser(user);
         intake.setAmount(request.getAmount());
-        intake.setConsumedAt(LocalDateTime.now());
+        ZoneId zone = ZoneId.of(user.getTimezone());
+        intake.setConsumedAt(LocalDateTime.now(zone));
 
         WaterIntake saved = waterIntakeRepository.save(intake);
 
@@ -81,7 +83,8 @@ public class WaterServiceImpl implements WaterService {
 
         User user = authenticatedUserService.getCurrentUser();
 
-        LocalDate today = LocalDate.now();
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
+        LocalDate today = LocalDate.now(zone);
 
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
@@ -118,7 +121,8 @@ public class WaterServiceImpl implements WaterService {
 
         User user = authenticatedUserService.getCurrentUser();
 
-        LocalDate today = LocalDate.now();
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
+        LocalDate today = LocalDate.now(zone);
 
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();

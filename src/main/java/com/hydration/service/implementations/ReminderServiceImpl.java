@@ -107,7 +107,6 @@ public class ReminderServiceImpl implements ReminderService {
                     }
 
                     user.setLastGoalNotificationDate(today);
-
                     userRepository.save(user);
 
                     log.info(
@@ -121,26 +120,26 @@ public class ReminderServiceImpl implements ReminderService {
                             "Skipping goal notification for '{}'. Already notified today.",
                             user.getUsername()
                     );
-
                 }
 
                 continue;
-
             }
 
+            if (user.getLastReminderSentAt() != null
+                    && user.getLastReminderSentAt()
+                    .isAfter(LocalDateTime.now(zone).minusHours(reminderIntervalHours))) {
+
+                log.info(
+                        "Skipping reminder for '{}'. Reminder sent recently.",
+                        user.getUsername()
+                );
+
+                continue;
+            }
+
+            boolean reminderSent = false;
+
             if (Boolean.TRUE.equals(user.getEmailNotificationEnabled())) {
-
-                if(user.getLastReminderSentAt()!=null &&
-                        user.getLastReminderSentAt()
-                                .isAfter(LocalDateTime.now().minusHours(reminderIntervalHours))){
-
-                    log.info(
-                            "Skipping reminder for '{}'. Reminder sent recently.",
-                            user.getUsername()
-                    );
-                    continue;
-
-                }
 
                 emailService.sendHydrationReminder(
                         user.getEmail(),
@@ -152,10 +151,7 @@ public class ReminderServiceImpl implements ReminderService {
                         user.getUsername()
                 );
 
-                user.setLastReminderSentAt(LocalDateTime.now());
-
-                userRepository.save(user);
-
+                reminderSent = true;
             }
 
             if (Boolean.TRUE.equals(user.getTelegramNotificationEnabled())
@@ -169,13 +165,22 @@ public class ReminderServiceImpl implements ReminderService {
                 );
 
                 log.info(
-                        "Hydration reminder sent to user '{}'  via telegram notification.",
+                        "Hydration reminder sent to user '{}' via Telegram notification.",
                         user.getUsername()
                 );
 
+                reminderSent = true;
+            }
+
+            if (reminderSent) {
+
+                user.setLastReminderSentAt(
+                        LocalDateTime.now(zone)
+                );
+
+                userRepository.save(user);
             }
         }
 
-        log.info("Hydration reminder scheduler finished.");
     }
 }

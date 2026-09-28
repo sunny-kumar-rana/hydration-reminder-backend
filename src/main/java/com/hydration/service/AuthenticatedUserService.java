@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+
 @Component
 @RequiredArgsConstructor
 public class AuthenticatedUserService {
@@ -28,5 +30,9 @@ public class AuthenticatedUserService {
         return SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
+    }
+
+    public ZoneId getCurrentUserZoneId() {
+        return ZoneId.of(getCurrentUser().getTimezone());
     }
 }

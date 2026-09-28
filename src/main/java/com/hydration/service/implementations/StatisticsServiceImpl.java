@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +93,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .min(LocalDate::compareTo)
                     .orElse(LocalDate.now());
 
-            LocalDate today = LocalDate.now();
+            ZoneId zone = ZoneId.of(user.getTimezone());
+            LocalDate today = LocalDate.now(zone);
 
             // Longest streak & achieved days
             for (LocalDate date = firstDay;
@@ -167,7 +169,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         List<WeeklyStatisticsResponse> response = new ArrayList<>();
 
-        LocalDate today = LocalDate.now();
+        ZoneId zone = authenticatedUserService.getCurrentUserZoneId();
+        LocalDate today = LocalDate.now(zone);
 
         LocalDate weekStart = today.minusWeeks(3);
 

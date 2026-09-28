@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,9 @@ class WaterServiceImplTest {
         user.setEmail("test@example.com");
         user.setDailyGoal(3000);
         user.setTimezone("Asia/Kolkata");
+
+        when(authenticatedUserService.getCurrentUser())
+                .thenReturn(user);
     }
 
     @Test
@@ -188,6 +192,9 @@ class WaterServiceImplTest {
         when(authenticatedUserService.getCurrentUser())
                 .thenReturn(user);
 
+        when(authenticatedUserService.getCurrentUserZoneId())
+                .thenReturn(ZoneId.of("Asia/Kolkata"));
+
         when(waterIntakeRepository.findAllByUserAndConsumedAtBetween(
                 eq(user),
                 any(LocalDateTime.class),
@@ -208,6 +215,9 @@ class WaterServiceImplTest {
 
         when(authenticatedUserService.getCurrentUser())
                 .thenReturn(user);
+
+        when(authenticatedUserService.getCurrentUserZoneId())
+                .thenReturn(ZoneId.of("Asia/Kolkata"));
 
         when(waterIntakeRepository.findAllByUserAndConsumedAtBetween(
                 eq(user),
@@ -232,6 +242,9 @@ class WaterServiceImplTest {
         when(authenticatedUserService.getCurrentUser())
                 .thenReturn(user);
 
+        when(authenticatedUserService.getCurrentUserZoneId())
+                .thenReturn(ZoneId.of("Asia/Kolkata"));
+
         when(waterIntakeRepository.findAllByUserAndConsumedAtBetween(
                 eq(user),
                 any(LocalDateTime.class),
@@ -255,6 +268,9 @@ class WaterServiceImplTest {
 
         when(authenticatedUserService.getCurrentUser())
                 .thenReturn(user);
+
+        when(authenticatedUserService.getCurrentUserZoneId())
+                .thenReturn(ZoneId.of("Asia/Kolkata"));
 
         when(waterIntakeRepository.findAllByUserAndConsumedAtBetween(
                 eq(user),
